@@ -1,3 +1,8 @@
+[![Build status](https://travis-ci.org/ccmikechen/videx.svg?branch=master)](https://travis-ci.org/ccmikechen/videx)
+[![Videx version](https://img.shields.io/hexpm/v/videx.svg)](https://hex.pm/packages/videx)
+[![Hex.pm](https://img.shields.io/hexpm/dt/videx.svg)](https://hex.pm/packages/videx)
+[![Inline docs](https://inch-ci.org/github/ccmikechen/videx.svg?branch=master)](https://inch-ci.org/github/ccmikechen/videx)
+
 # Videx
 
 Videx is a simple video url parser for parsing and generating video urls.
