@@ -46,6 +46,75 @@ defmodule Videx.Youtube do
     end
   end
 
+  def generate(_, _, params \\ %{})
+
+  def generate(%__MODULE__{id: id}, :long, params) do
+    query =
+      %{v: id}
+      |> Map.merge(params)
+      |> encode_query()
+
+    %URI{
+      scheme: "https",
+      host: "www.youtube.com",
+      path: "/watch",
+      query: query
+    }
+    |> URI.to_string()
+  end
+
+  def generate(%__MODULE__{id: id}, :short, params) do
+    %URI{
+      scheme: "https",
+      host: "youtu.be",
+      path: "/#{id}",
+      query: encode_query(params)
+    }
+    |> URI.to_string()
+  end
+
+  def generate(%__MODULE__{id: id}, :embed, params) do
+    %URI{
+      scheme: "https",
+      host: "www.youtube.com",
+      path: "/embed/#{id}",
+      query: encode_query(params)
+    }
+    |> URI.to_string()
+  end
+
+  def generate(%__MODULE__{} = video, :oembed, params) do
+    query =
+      %{url: generate(video, :long)}
+      |> Map.merge(params)
+      |> encode_query()
+
+    %URI{
+      scheme: "https",
+      host: "www.youtube.com",
+      path: "/oembed",
+      query: query
+    }
+    |> URI.to_string()
+  end
+
+  def generate(%__MODULE__{id: id}, :video, params) do
+    %URI{
+      scheme: "https",
+      host: "www.youtube.com",
+      path: "/v/#{id}",
+      query: encode_query(params)
+    }
+    |> URI.to_string()
+  end
+
+  def generate(id, type, params) when is_binary(id) do
+    generate(%__MODULE__{id: id}, type, params)
+  end
+
   defp parse_params(nil), do: %{}
   defp parse_params(query), do: URI.decode_query(query)
+
+  defp encode_query(params) when params == %{}, do: nil
+  defp encode_query(params), do: URI.encode_query(params)
 end
