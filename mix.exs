@@ -1,28 +1,45 @@
 defmodule Videx.MixProject do
   use Mix.Project
 
+  @description "Videx is a simple video url parser."
+  @version "0.1.0"
+
   def project do
     [
       app: :videx,
-      version: "0.1.0",
-      elixir: "~> 1.9",
-      start_permanent: Mix.env() == :prod,
-      deps: deps()
+      name: "Videx",
+      description: @description,
+      version: @version,
+      elixir: ">= 1.4.0",
+      package: package(),
+      deps: deps(),
+      source_url: "https://github.com/ccmikechen/videx"
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       extra_applications: [:logger]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
-    [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-    ]
+    []
+  end
+
+  defp package do
+    %{
+      maintainers: ["Mike Chen"],
+      licenses: ["MIT"],
+      files: [
+        "lib",
+        "mix.exs",
+        "README.md",
+        "LICENSE"
+      ],
+      links: %{
+        "GitHub" => "https://github.com/ccmikechen/videx"
+      }
+    }
   end
 end
