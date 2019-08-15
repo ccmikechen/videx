@@ -59,4 +59,19 @@ defmodule Videx.YoutubeTest do
     url = Youtube.generate(@video, :video, %{version: 3, autohide: 1})
     assert url == "https://www.youtube.com/v/Hh9yZWeTmVM?autohide=1&version=3"
   end
+
+  test "generate embed HTML" do
+    html = Youtube.html(@video)
+
+    assert html ==
+             "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Hh9yZWeTmVM\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
+  end
+
+  test "generate embed HTML with params" do
+    html =
+      Youtube.html(@video, width: 100, height: 100, controls: false, nocookie: true, start_at: 100)
+
+    assert html ==
+             "<iframe width=\"100\" height=\"100\" src=\"https://www.youtube-nocookie.com/embed/Hh9yZWeTmVM?controls=0&start=100\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
+  end
 end

@@ -112,6 +112,55 @@ defmodule Videx.Youtube do
     generate(%__MODULE__{id: id}, type, params)
   end
 
+  def html(_, params \\ [])
+
+  def html(%__MODULE__{id: id}, params) do
+    width = params[:width] || 560
+    height = params[:height] || 315
+    start_at = params[:start_at]
+    controls = is_nil(params[:controls]) || params[:controls]
+    nocookie = params[:nocookie]
+
+    host =
+      case nocookie do
+        true -> "www.youtube-nocookie.com"
+        _ -> "www.youtube.com"
+      end
+
+    query =
+      %{}
+      |> Map.merge(
+        if start_at do
+          %{start: start_at}
+        else
+          %{}
+        end
+      )
+      |> Map.merge(
+        if controls do
+          %{}
+        else
+          %{controls: 0}
+        end
+      )
+      |> encode_query()
+
+    url =
+      %URI{
+        scheme: "https",
+        host: host,
+        path: "/embed/#{id}",
+        query: query
+      }
+      |> URI.to_string()
+
+    "<iframe width=\"#{width}\" height=\"#{height}\" src=\"#{url}\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>"
+  end
+
+  def html(id, params) when is_binary(id) do
+    html(%__MODULE__{id: id}, params)
+  end
+
   defp parse_params(nil), do: %{}
   defp parse_params(query), do: URI.decode_query(query)
 
