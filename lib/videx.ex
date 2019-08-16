@@ -3,7 +3,7 @@ defmodule Videx do
   Documentation for Videx.
   """
 
-  alias Videx.{Youtube}
+  alias Videx.{Youtube, Vimeo}
 
   @doc """
   Parse video URL.
@@ -17,6 +17,7 @@ defmodule Videx do
   def parse(url) do
     cond do
       Youtube.match?(url) -> Youtube.parse(url)
+      Vimeo.match?(url) -> Vimeo.parse(url)
       true -> nil
     end
   end

@@ -1,5 +1,5 @@
 defmodule Videx.Youtube do
-  defstruct [:type, :id, :params]
+  use Videx.Video
 
   # From https://stackoverflow.com/a/37704433
   @regex ~r/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
@@ -136,13 +136,7 @@ defmodule Videx.Youtube do
           %{}
         end
       )
-      |> Map.merge(
-        if controls do
-          %{}
-        else
-          %{controls: 0}
-        end
-      )
+      |> merge_query(:controls, controls, false)
       |> encode_query()
 
     url =
@@ -160,10 +154,4 @@ defmodule Videx.Youtube do
   def html(id, params) when is_binary(id) do
     html(%__MODULE__{id: id}, params)
   end
-
-  defp parse_params(nil), do: %{}
-  defp parse_params(query), do: URI.decode_query(query)
-
-  defp encode_query(params) when params == %{}, do: nil
-  defp encode_query(params), do: URI.encode_query(params)
 end

@@ -8,6 +8,9 @@ defmodule VidexTest do
   @youtube_oembed "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=Hh9yZWeTmVM&format=json"
   @youtube_video "http://www.youtube.com/v/Hh9yZWeTmVM?version=3&autohide=1"
 
+  @vimeo_short "https://vimeo.com/22439234"
+  @vimeo_embed "http://player.vimeo.com/video/22439234?title=0&byline=0"
+
   @elixir_url "https://elixir-lang.org/"
 
   test "parse Youtube long URL" do
@@ -42,6 +45,21 @@ defmodule VidexTest do
              type: :video,
              id: "Hh9yZWeTmVM",
              params: %{"version" => "3", "autohide" => "1"}
+           }
+  end
+
+  test "parse Vimeo short URL" do
+    parsed = Videx.parse(@vimeo_short)
+    assert parsed == %Videx.Vimeo{type: :short, id: "22439234", params: %{}}
+  end
+
+  test "parse Vimeo embed URL" do
+    parsed = Videx.parse(@vimeo_embed)
+
+    assert parsed == %Videx.Vimeo{
+             type: :embed,
+             id: "22439234",
+             params: %{"title" => "0", "byline" => "0"}
            }
   end
 
