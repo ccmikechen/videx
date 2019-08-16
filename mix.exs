@@ -2,7 +2,7 @@ defmodule Videx.MixProject do
   use Mix.Project
 
   @description "Videx is a simple video url parser."
-  @version "0.1.0"
+  @version "0.2.0"
 
   def project do
     [
