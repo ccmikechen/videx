@@ -4,8 +4,26 @@ defmodule Videx.Youtube do
   # From https://stackoverflow.com/a/37704433
   @regex ~r/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
 
+  @doc """
+  Check if the URL is valid video URL for Youtube.
+
+  ## Examples
+
+      iex> Videx.Youtube.match?("https://www.youtube.com/watch?v=Hh9yZWeTmVM")
+      true
+
+  """
   def match?(url), do: String.match?(url, @regex)
 
+  @doc """
+  Parse and extract information from Youtube video URL.
+
+  ## Examples
+
+      iex> Videx.Youtube.parse("https://www.youtube.com/watch?v=Hh9yZWeTmVM")
+      %Videx.Youtube{id: "Hh9yZWeTmVM", params: %{}, type: :long}
+
+  """
   def parse(url) do
     case URI.parse(url) do
       %URI{host: "youtu.be", path: "/" <> id, query: query} ->
@@ -46,7 +64,19 @@ defmodule Videx.Youtube do
     end
   end
 
-  def generate(_, _, params \\ %{})
+  @doc """
+  Generate URL for Youtube video.
+
+  ## Examples
+
+      iex> Videx.Youtube.generate(%Videx.Youtube{id: "Hh9yZWeTmVM"})
+      "https://www.youtube.com/watch?v=Hh9yZWeTmVM"
+
+      iex> Videx.Youtube.generate("Hh9yZWeTmVM", :short, %{t: 80})
+      "https://youtu.be/Hh9yZWeTmVM?t=80"
+
+  """
+  def generate(_, type \\ :long, params \\ %{})
 
   def generate(%__MODULE__{id: id}, :long, params) do
     query =
@@ -112,6 +142,18 @@ defmodule Videx.Youtube do
     generate(%__MODULE__{id: id}, type, params)
   end
 
+  @doc """
+  Generate embed HTML for Youtube video.
+
+  ## Examples
+
+      iex> Videx.Youtube.html(%Videx.Youtube{id: "Hh9yZWeTmVM"})
+      "<iframe width=\\"560\\" height=\\"315\\" src=\\"https://www.youtube.com/embed/Hh9yZWeTmVM\\" frameborder=\\"0\\" allow=\\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\\" allowfullscreen></iframe>"
+
+      iex> Videx.Youtube.html("Hh9yZWeTmVM", width: 320, height: 240)
+      "<iframe width=\\"320\\" height=\\"240\\" src=\\"https://www.youtube.com/embed/Hh9yZWeTmVM\\" frameborder=\\"0\\" allow=\\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\\" allowfullscreen></iframe>"
+
+  """
   def html(_, params \\ [])
 
   def html(%__MODULE__{id: id}, params) do

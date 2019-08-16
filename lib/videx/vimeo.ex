@@ -3,8 +3,26 @@ defmodule Videx.Vimeo do
 
   @regex ~r/^((?:https?:)?\/\/)?(?:www\.|player\.)?vimeo.com\/(video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)([\w\-]+)(\S+)?/
 
+  @doc """
+  Check if the URL is valid video URL for Vimeo.
+
+  ## Examples
+
+      iex> Videx.Vimeo.match?("https://vimeo.com/22439234")
+      true
+
+  """
   def match?(url), do: String.match?(url, @regex)
 
+  @doc """
+  Parse and extract information from Vimeo video URL.
+
+  ## Examples
+
+      iex> Videx.Vimeo.parse("https://vimeo.com/22439234")
+      %Videx.Vimeo{id: "22439234", params: %{}, type: :short}
+
+  """
   def parse(url) do
     case URI.parse(url) do
       %URI{host: "vimeo.com", path: "/" <> id, query: query} ->
@@ -18,7 +36,19 @@ defmodule Videx.Vimeo do
     end
   end
 
-  def generate(_, _, params \\ %{})
+  @doc """
+  Generate URL for Vimeo video.
+
+  ## Examples
+
+      iex> Videx.Vimeo.generate(%Videx.Vimeo{id: "22439234"})
+      "https://vimeo.com/22439234"
+
+      iex> Videx.Vimeo.generate("22439234", :embed, %{title: 0})
+      "https://player.vimeo.com/video/22439234?title=0"
+
+  """
+  def generate(_, type \\ :short, params \\ %{})
 
   def generate(%__MODULE__{id: id}, :short, params) do
     %URI{
@@ -44,6 +74,18 @@ defmodule Videx.Vimeo do
     generate(%__MODULE__{id: id}, type, params)
   end
 
+  @doc """
+  Generate embed HTML for Vimeo video.
+
+  ## Examples
+
+      iex> Videx.Vimeo.html(%Videx.Vimeo{id: "22439234"})
+      "<iframe src=\\"https://player.vimeo.com/video/22439234\\" width=\\"640\\" height=\\"360\\" frameborder=\\"0\\" allow=\\"autoplay; fullscreen\\" allowfullscreen></iframe>"
+
+      iex> Videx.Vimeo.html("22439234", width: 320, height: 240)
+      "<iframe src=\\"https://player.vimeo.com/video/22439234\\" width=\\"320\\" height=\\"240\\" frameborder=\\"0\\" allow=\\"autoplay; fullscreen\\" allowfullscreen></iframe>"
+
+  """
   def html(_, params \\ [])
 
   def html(%__MODULE__{id: id}, params) do
