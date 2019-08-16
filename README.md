@@ -40,7 +40,7 @@ Add Videx to your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:videx, "~> 0.1.0"}
+    {:videx, "~> 0.2.0"}
   ]
 end
 ```
@@ -52,7 +52,7 @@ Current Features or To-Do
 
 - [x] Supports: parse and generate url for
   - [x] [YouTube](https://www.youtube.com/)
-  - [ ] [Vimeo](https://vimeo.com/)
+  - [x] [Vimeo](https://vimeo.com/)
   - [ ] [Twitch](https://www.twitch.tv/)
   - [ ] [SoundCloud](https://soundcloud.com/)
   - [ ] [Youku](https://www.youku.com/)
